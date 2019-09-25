@@ -66,7 +66,7 @@ void Application::Init()
         200,
         static_cast<int>(1280),
         static_cast<int>(720), 0);
-
+    window_size = { 1280, 720 };
     glfwSetKeyCallback(window, key_callback);
     glfwSetCursorPosCallback(window, cursor_position_callback);
     glfwSetMouseButtonCallback(window, mouse_button_callback);

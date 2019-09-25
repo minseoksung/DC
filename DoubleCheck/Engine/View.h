@@ -7,6 +7,7 @@ class View
 private:
     Camera camera{};
     CameraView camera_view{};
+    matrix3 ndc_matrix;
 public:
     void Init();
     void Update(float dt);
@@ -18,6 +19,10 @@ public:
     CameraView& Get_Camera_View()
     {
         return camera_view;
+    }
+    matrix3 Get_Ndc_Matrix()
+    {
+        return ndc_matrix;
     }
 
 

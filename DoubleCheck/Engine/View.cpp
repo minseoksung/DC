@@ -2,10 +2,13 @@
 #include <iostream>
 #include "Input.h"
 #include "Graphic.h"
+#include "Application.hpp"
 
 void View::Init()
 {
     camera_view.SetViewSize(1280, 720);
+    vector2 save_window_size = Application::Get_Application()->Get_Window_Size();
+    ndc_matrix = MATRIX3::build_scale(save_window_size.x / 2, save_window_size.y / 2);
 }
 
 void View::Update(float dt)

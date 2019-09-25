@@ -119,8 +119,17 @@ void Sprite::Init(Object* obj)
         convert_center.y = m_owner->Get_Center().y;
         convert_center.z = 1.0f;
 
+        float save_zoom = Graphic::GetGraphic()->Get_View().Get_Camera_View().GetZoom();
+        if(save_zoom > 0)
+        {
+            Graphic::GetGraphic()->Get_View().Get_Camera_View().SetZoom(1.1f);
+        }
+        else
+        {
+            Graphic::GetGraphic()->Get_View().Get_Camera_View().SetZoom(0.9f);
+        }
+
         vector2 save_translation = m_owner->GetTransform().GetTranslation();
-        //vector2 convert_translation = { abs(save_translation.x) / save_translation.x, abs(save_translation.y) / save_translation.y };
         vector2 convert_translation = normalize(save_translation);
         m_owner->GetTransform().SetTranslation(convert_translation);
         convert_center = m_owner->GetTransform().GetModelToWorld() * convert_center;
@@ -128,8 +137,7 @@ void Sprite::Init(Object* obj)
 
         convert_center = Graphic::GetGraphic()->Get_View().Get_Camera().WorldToCamera() * convert_center;
         convert_center = Graphic::GetGraphic()->Get_View().Get_Camera_View().GetCameraToNDCTransform() * convert_center;
-        convert_center.x *= 640;
-        convert_center.y *= 360;
+        convert_center = Graphic::GetGraphic()->Get_View().Get_Ndc_Matrix() * convert_center;
         
         m_owner->Set_Center({convert_center.x, convert_center.y});
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -150,11 +158,9 @@ void Sprite::Init(Object* obj)
             convert_points = m_owner->GetTransform().GetModelToWorld() * convert_points;
             m_owner->GetTransform().SetTranslation(save_translation_sec);
 
-
             convert_points = Graphic::GetGraphic()->Get_View().Get_Camera().WorldToCamera() * convert_points;
             convert_points = Graphic::GetGraphic()->Get_View().Get_Camera_View().GetCameraToNDCTransform() * convert_points;
-            convert_points.x *= 640;
-            convert_points.y *= 360;
+            convert_points = Graphic::GetGraphic()->Get_View().Get_Ndc_Matrix() * convert_points;
 
             vector2 result;
             result.x = convert_points.x;
@@ -164,7 +170,7 @@ void Sprite::Init(Object* obj)
         }
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////
         m_owner->GetMesh().Get_Is_Moved() = false;
-
+        Graphic::GetGraphic()->Get_View().Get_Camera_View().SetZoom(save_zoom);
         material.matrix3Uniforms["to_ndc"] = mat_ndc;
     }
 

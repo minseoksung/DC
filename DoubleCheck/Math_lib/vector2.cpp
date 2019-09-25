@@ -154,11 +154,14 @@ vector2 normalize(vector2 a) noexcept
 {
     vector2 result_vec;
     float   magnitude_val = 0.0f;
+    const vector2 zero_vec{ 0.0f, 0.0f };
+    if(a != zero_vec)
+    {
+        magnitude_val = magnitude(a);
 
-    magnitude_val = magnitude(a);
-    result_vec.x = a.x / magnitude_val;
-    result_vec.y = a.y / magnitude_val;
-
+        result_vec.x = a.x / magnitude_val;
+        result_vec.y = a.y / magnitude_val;
+    }
     return result_vec;
 }
 float distance_between_squared(vector2 a, vector2 b) noexcept
